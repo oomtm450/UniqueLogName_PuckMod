@@ -23,32 +23,28 @@ namespace oomtm450PuckMod_UniqueLogName {
         #endregion
 
         /// <summary>
-        /// Class that patches the Awake event from LogManager.
+        /// Method that patches the logs.
         /// </summary>
-        [HarmonyPatch(typeof(LogManager), nameof(LogManager.Awake))]
-        public class LogManager_Awake_Patch {
-            [HarmonyPostfix]
-            public static void Postfix(LogManager __instance) {
-                try {
-                    string path = Path.Combine(__instance.LogsPath, string.Format("Puck_{0:yyyy-MM-dd_HH:mm:ss}.log", DateTime.Now));
+        private static void Patch(string logName) {
+            try {
+                string path = Path.Combine(LogManager.Instance.LogsPath, logName);
 
-                    StreamWriter sw = new StreamWriter(path, false, Encoding.UTF8) {
-                        AutoFlush = true,
-                    };
+                StreamWriter sw = new StreamWriter(path, false, Encoding.UTF8) {
+                    AutoFlush = true,
+                };
 
-                    FieldInfo streamWriterFieldInfo = typeof(LogManager).GetField("streamWriter", BindingFlags.NonPublic | BindingFlags.Instance);
-                    StreamWriter oldSw = (StreamWriter)streamWriterFieldInfo.GetValue(__instance);
+                FieldInfo streamWriterFieldInfo = typeof(LogManager).GetField("streamWriter", BindingFlags.NonPublic | BindingFlags.Instance);
+                StreamWriter oldSw = (StreamWriter)streamWriterFieldInfo.GetValue(LogManager.Instance);
 
-                    if (oldSw != null) {
-                        oldSw.Close();
-                        oldSw = null;
-                    }
-
-                    streamWriterFieldInfo.SetValue(__instance, sw);
+                if (oldSw != null) {
+                    oldSw.Close();
+                    oldSw = null;
                 }
-                catch (Exception ex) {
-                    Logging.LogError($"Error in LogManager_Awake_Patch Postfix().\n{ex}");
-                }
+
+                streamWriterFieldInfo.SetValue(LogManager.Instance, sw);
+            }
+            catch (Exception ex) {
+                Logging.LogError($"Error in Patch().\n{ex}");
             }
         }
 
@@ -61,6 +57,7 @@ namespace oomtm450PuckMod_UniqueLogName {
                 Logging.Log($"Enabling...");
 
                 _harmony.PatchAll();
+                Patch(string.Format("Puck_{0:yyyy-MM-dd_HH-mm-ss}.log", DateTime.Now));
 
                 Logging.Log($"Enabled.");
 
@@ -84,6 +81,7 @@ namespace oomtm450PuckMod_UniqueLogName {
 
                 Logging.Log($"Disabling...");
 
+                Patch("Puck.log");
                 _harmony.UnpatchSelf();
 
                 Logging.Log($"Disabled.");
