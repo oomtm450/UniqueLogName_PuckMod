@@ -37,6 +37,13 @@ namespace oomtm450PuckMod_UniqueLogName {
                     };
 
                     FieldInfo streamWriterFieldInfo = typeof(LogManager).GetField("streamWriter", BindingFlags.NonPublic | BindingFlags.Instance);
+                    StreamWriter oldSw = (StreamWriter)streamWriterFieldInfo.GetValue(__instance);
+
+                    if (oldSw != null) {
+                        oldSw.Close();
+                        oldSw = null;
+                    }
+
                     streamWriterFieldInfo.SetValue(__instance, sw);
                 }
                 catch (Exception ex) {
@@ -57,9 +64,6 @@ namespace oomtm450PuckMod_UniqueLogName {
 
                 Logging.Log($"Enabled.");
 
-                Logging.Log("Subscribing to events.");
-                EventManager.Instance.AddEventListener("Event_OnPlayerSpawned", Event_OnPlayerSpawned);
-
                 _harmonyPatched = true;
                 return true;
             }
@@ -79,9 +83,6 @@ namespace oomtm450PuckMod_UniqueLogName {
                     return true;
 
                 Logging.Log($"Disabling...");
-
-                Logging.Log("Unsubscribing from events.");
-                EventManager.Instance.RemoveEventListener("Event_OnPlayerSpawned", Event_OnPlayerSpawned);
 
                 _harmony.UnpatchSelf();
 
