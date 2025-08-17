@@ -1,4 +1,4 @@
-﻿using oomtm450PuckMod_Template.Configs;
+﻿using oomtm450PuckMod_UniqueLogName.Configs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,7 +6,7 @@ using System.Text;
 using Unity.Collections;
 using Unity.Netcode;
 
-namespace oomtm450PuckMod_Template.SystemFunc {
+namespace oomtm450PuckMod_UniqueLogName.SystemFunc {
     /// <summary>
     /// Class containing code for network communication from/to client/server.
     /// </summary>

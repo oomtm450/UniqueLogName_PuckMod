@@ -1,6 +1,6 @@
-﻿using oomtm450PuckMod_Template.Configs;
+﻿using oomtm450PuckMod_UniqueLogName.Configs;
 
-namespace oomtm450PuckMod_Template.SystemFunc {
+namespace oomtm450PuckMod_UniqueLogName.SystemFunc {
     internal class PlayerFunc {
         #region Constants
         /// <summary>
