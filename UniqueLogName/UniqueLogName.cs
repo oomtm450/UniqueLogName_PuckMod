@@ -1,8 +1,9 @@
 ﻿using HarmonyLib;
 using oomtm450PuckMod_UniqueLogName.SystemFunc;
 using System;
-using System.Collections.Generic;
-using Unity.Netcode;
+using System.IO;
+using System.Reflection;
+using System.Text;
 
 namespace oomtm450PuckMod_UniqueLogName {
     /// <summary>
@@ -20,6 +21,29 @@ namespace oomtm450PuckMod_UniqueLogName {
         /// </summary>
         private static bool _harmonyPatched = false;
         #endregion
+
+        /// <summary>
+        /// Class that patches the Awake event from LogManager.
+        /// </summary>
+        [HarmonyPatch(typeof(LogManager), nameof(LogManager.Awake))]
+        public class LogManager_Awake_Patch {
+            [HarmonyPostfix]
+            public static void Postfix(LogManager __instance) {
+                try {
+                    string path = Path.Combine(__instance.LogsPath, string.Format("Puck_{0:yyyy-MM-dd_HH:mm:ss}.log", DateTime.Now));
+
+                    StreamWriter sw = new StreamWriter(path, false, Encoding.UTF8) {
+                        AutoFlush = true,
+                    };
+
+                    FieldInfo streamWriterFieldInfo = typeof(LogManager).GetField("streamWriter", BindingFlags.NonPublic | BindingFlags.Instance);
+                    streamWriterFieldInfo.SetValue(__instance, sw);
+                }
+                catch (Exception ex) {
+                    Logging.LogError($"Error in LogManager_Awake_Patch Postfix().\n{ex}");
+                }
+            }
+        }
 
         /// <summary>
         /// Method that launches when the mod is being enabled.
