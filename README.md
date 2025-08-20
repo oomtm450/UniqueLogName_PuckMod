@@ -1,3 +1,3 @@
 # UniqueLogName_PuckMod
 Unique log name mod for the game Puck.
-!ADD STEAM WORKSHOP LINK!
+https://steamcommunity.com/sharedfiles/filedetails/?id=3550405363
