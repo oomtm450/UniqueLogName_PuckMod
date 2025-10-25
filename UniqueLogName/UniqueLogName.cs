@@ -11,10 +11,10 @@ namespace oomtm450PuckMod_UniqueLogName {
     /// </summary>
     public class UniqueLogName : IPuckMod {
         #region Fields
-        /// <summary>
+        /*/// <summary>
         /// Harmony, harmony instance to patch the Puck's code.
         /// </summary>
-        private static readonly Harmony _harmony = new Harmony(Constants.MOD_NAME);
+        private static readonly Harmony _harmony = new Harmony(Constants.MOD_NAME);*/
 
         /// <summary>
         /// Bool, true if the mod has been patched in.
@@ -56,7 +56,7 @@ namespace oomtm450PuckMod_UniqueLogName {
             try {
                 Logging.Log($"Enabling...");
 
-                _harmony.PatchAll();
+                //_harmony.PatchAll();
                 Patch(string.Format("Puck_{0:yyyy-MM-dd_HH-mm-ss}.log", DateTime.Now));
 
                 Logging.Log($"Enabled.");
@@ -82,7 +82,7 @@ namespace oomtm450PuckMod_UniqueLogName {
                 Logging.Log($"Disabling...");
 
                 Patch("Puck.log");
-                _harmony.UnpatchSelf();
+                //_harmony.UnpatchSelf();
 
                 Logging.Log($"Disabled.");
 
