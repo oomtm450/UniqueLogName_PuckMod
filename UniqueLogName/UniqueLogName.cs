@@ -21,21 +21,21 @@ namespace oomtm450PuckMod_UniqueLogName {
         /// </summary>
         private static void Patch(string logName) {
             try {
-                string path = Path.Combine(LogManager.Instance.LogsPath, logName);
+                string path = Path.Combine(GetPrivateField<string>(typeof(LogManager), null, "logDirectoryPath"), logName);
 
                 StreamWriter sw = new StreamWriter(path, false, Encoding.UTF8) {
                     AutoFlush = true,
                 };
 
                 FieldInfo streamWriterFieldInfo = typeof(LogManager).GetField("streamWriter", BindingFlags.NonPublic | BindingFlags.Instance);
-                StreamWriter oldSw = (StreamWriter)streamWriterFieldInfo.GetValue(LogManager.Instance);
+                StreamWriter oldSw = GetPrivateField<StreamWriter>(typeof(LogManager), null, "streamWriter");
 
                 if (oldSw != null) {
                     oldSw.Close();
                     oldSw = null;
                 }
 
-                streamWriterFieldInfo.SetValue(LogManager.Instance, sw);
+                streamWriterFieldInfo.SetValue(null, sw);
             }
             catch (Exception ex) {
                 Logging.LogError($"Error in {nameof(Patch)}().\n{ex}");
@@ -85,6 +85,10 @@ namespace oomtm450PuckMod_UniqueLogName {
                 Logging.LogError($"Failed to disable.\n{ex}");
                 return false;
             }
+        }
+
+        public static T GetPrivateField<T>(Type typeContainingField, object instanceOfType, string fieldName) {
+            return (T)typeContainingField.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(instanceOfType);
         }
     }
 }
