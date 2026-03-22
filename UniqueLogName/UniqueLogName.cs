@@ -39,6 +39,7 @@ namespace oomtm450PuckMod_UniqueLogName {
             }
             catch (Exception ex) {
                 Logging.LogError($"Error in {nameof(Patch)}().\n{ex}");
+                throw ex;
             }
         }
 
