@@ -89,7 +89,10 @@ namespace oomtm450PuckMod_UniqueLogName {
         }
 
         public static T GetPrivateField<T>(Type typeContainingField, object instanceOfType, string fieldName) {
-            return (T)typeContainingField.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(instanceOfType);
+            if (instanceOfType == null)
+                return (T)typeContainingField.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static).GetValue(instanceOfType);
+            else
+                return (T)typeContainingField.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(instanceOfType);
         }
     }
 }
