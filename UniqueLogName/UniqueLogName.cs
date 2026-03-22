@@ -1,5 +1,4 @@
-﻿using HarmonyLib;
-using oomtm450PuckMod_UniqueLogName.SystemFunc;
+﻿using oomtm450PuckMod_UniqueLogName.SystemFunc;
 using System;
 using System.IO;
 using System.Reflection;
@@ -11,11 +10,6 @@ namespace oomtm450PuckMod_UniqueLogName {
     /// </summary>
     public class UniqueLogName : IPuckMod {
         #region Fields
-        /*/// <summary>
-        /// Harmony, harmony instance to patch the Puck's code.
-        /// </summary>
-        private static readonly Harmony _harmony = new Harmony(Constants.MOD_NAME);*/
-
         /// <summary>
         /// Bool, true if the mod has been patched in.
         /// </summary>
@@ -44,7 +38,7 @@ namespace oomtm450PuckMod_UniqueLogName {
                 streamWriterFieldInfo.SetValue(LogManager.Instance, sw);
             }
             catch (Exception ex) {
-                Logging.LogError($"Error in Patch().\n{ex}");
+                Logging.LogError($"Error in {nameof(Patch)}().\n{ex}");
             }
         }
 
@@ -56,7 +50,6 @@ namespace oomtm450PuckMod_UniqueLogName {
             try {
                 Logging.Log($"Enabling...");
 
-                //_harmony.PatchAll();
                 Patch(string.Format("Puck_{0:yyyy-MM-dd_HH-mm-ss}.log", DateTime.Now));
 
                 Logging.Log($"Enabled.");
@@ -82,7 +75,6 @@ namespace oomtm450PuckMod_UniqueLogName {
                 Logging.Log($"Disabling...");
 
                 Patch("Puck.log");
-                //_harmony.UnpatchSelf();
 
                 Logging.Log($"Disabled.");
 
