@@ -27,8 +27,8 @@ namespace oomtm450PuckMod_UniqueLogName {
                     AutoFlush = true,
                 };
 
-                FieldInfo streamWriterFieldInfo = typeof(LogManager).GetField("streamWriter", BindingFlags.NonPublic | BindingFlags.Instance);
-                StreamWriter oldSw = GetPrivateField<StreamWriter>(typeof(LogManager), null, "streamWriter");
+                FieldInfo streamWriterFieldInfo = typeof(LogManager).GetField("streamWriter", BindingFlags.NonPublic | BindingFlags.Static);
+                StreamWriter oldSw = (StreamWriter)streamWriterFieldInfo.GetValue(null);
 
                 if (oldSw != null) {
                     oldSw.Close();
