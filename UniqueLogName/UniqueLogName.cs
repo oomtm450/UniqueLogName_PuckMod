@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using oomtm450PuckMod_UniqueLogName.SystemFunc;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -34,7 +33,7 @@ namespace oomtm450PuckMod_UniqueLogName {
         /// <summary>
         /// Class that patches the Client_SendChatMessageRpc event from ChatManager.
         /// </summary>
-        [HarmonyPatch(typeof(ChatManager), nameof(ChatManager.Client_SendChatMessageRpc))]
+        [HarmonyPatch(typeof(ChatManager), "Client_SendChatMessageRpc")]
         public class ChatManager_Client_SendChatMessageRpc_Patch {
             [HarmonyPrefix]
             private static bool Prefix(string content, bool isQuickChat, bool isTeamChat, RpcParams rpcParams) {
@@ -53,12 +52,14 @@ namespace oomtm450PuckMod_UniqueLogName {
         /// </summary>
         private static void Patch(string logName, string chatLogName = "") {
             try {
+                string logDirectoryPath = GetPrivateField<string>(typeof(LogManager), null, "logDirectoryPath");
+
                 if (string.IsNullOrEmpty(chatLogName))
                     _chatLogPath = "";
                 else
-                    _chatLogPath = Path.Combine(LogManager.Instance.LogsPath, chatLogName);
+                    _chatLogPath = Path.Combine(logDirectoryPath, chatLogName);
 
-                StreamWriter sw = new StreamWriter(Path.Combine(GetPrivateField<string>(typeof(LogManager), null, "logDirectoryPath"), logName), false, Encoding.UTF8) {
+                StreamWriter sw = new StreamWriter(Path.Combine(logDirectoryPath, logName), false, Encoding.UTF8) {
                     AutoFlush = true,
                 };
 
