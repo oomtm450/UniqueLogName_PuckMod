@@ -12,7 +12,7 @@ namespace oomtm450PuckMod_UniqueLogName {
     /// <summary>
     /// Class containing the main code for the UniqueLogName patch.
     /// </summary>
-    public class UniqueLogName : IPuckMod {
+    public class UniqueLogName : IPuckPlugin {
         #region Fields
         /// <summary>
         /// Harmony, harmony instance to patch the Puck's code.
